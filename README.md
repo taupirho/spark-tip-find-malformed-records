@@ -28,8 +28,6 @@ We manually define its schema as follows:
 ```
 from pyspark.sql.types import StructField, StructType, DoubleType,StringType,LongType
 
- 
-
 citySchema = StructType([
 
         StructField("city", StringType(), True),
@@ -50,7 +48,7 @@ Records 1 and 2 are valid, record 3 has a spurious extra text field at its end. 
 
 To help dealing with bad or missing data, Spark is able to use three different parse modes when reading in data. These are:
 
-#Permissive
+# Permissive
 
 This is the default behaviour and tells Spark to insert nulls into fields that could not be properly parsed. Use this mode 
 when you want to read in as much of the data as possible and deal with invalid data at a later stage. Let’s see what we get 
@@ -61,10 +59,8 @@ df = spark.read.format("csv") \
     .option("header", "true").schema("citySchema") \
     .option("delimiter", ',').option("mode","permissive")
     .load("file:///d:/tmp/cities.txt")
-
  
 df.show()
-
 
 +---------+-------+--------+---------+----------+
 |     city|country|latitude|longitude|population|
@@ -83,7 +79,7 @@ three is an issue. Not that Spark ignored it – that bit is OK, but it would ha
 was not quit right with it. If you are a Scala programmer there is a way you can get this information. Check the end of this 
 article to see how.
 
-#Dropmalformed
+# Dropmalformed
 
 In this mode Spark will drop any records where one or more fields could not be parsed correctly. You would use this mode when 
 you only want to read in data that exactly meets your schema definition.
@@ -94,12 +90,7 @@ df = spark.read.format("csv") \
     .option("delimiter", ',').option("mode","dropmalformed")\
     .load("file:///d:/tmp/cities.txt")
 
- 
- 
-
 df.show()
-
- 
 
 +-----+-------+--------+---------+----------+
 | city|country|latitude|longitude|population|
@@ -109,7 +100,7 @@ df.show()
 +-----+-------+--------+---------+----------+
 ```
 
-#Failfast
+# Failfast
 
 In this mode Spark will simply return an error if there is any data at all that it can’t parse properly and no data will be 
 loaded. Use this mode when errors in the input data cannot be tolerated.
